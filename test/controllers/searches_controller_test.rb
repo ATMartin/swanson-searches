@@ -14,6 +14,19 @@ class SearchesControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, "Burger Second"
   end
 
+  test "should allow filtering the index by query" do
+    Search.create(query: "Bacon", quotes: ["Bacon"])
+    Search.create(query: "Burgers", quotes: ["Burger"])
+    Search.create(query: "Cheeseburgers", quotes: ["Different Text Here"])
+
+    get searches_url, params: { filter: "burger" }
+    assert_response :success
+
+    assert_not_includes @response.body, "Bacon"
+    assert_includes @response.body, "Burger"
+    assert_includes @response.body, "Different Text Here"
+  end
+
   test "should get search by id" do
     @search = Search.create(query: "Bacon", quotes: ["Bacon First", "Bacon Second"])
 

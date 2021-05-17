@@ -3,6 +3,11 @@ class SearchesController < ApplicationController
 
   def index
     @searches = Search.all
+
+    if params[:filter]
+      @searches = @searches.where("query ILIKE ?", "%#{params[:filter]}%")
+    end
+
     render json: @searches
   end
 
