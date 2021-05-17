@@ -88,7 +88,7 @@ class SearchesControllerTest < ActionDispatch::IntegrationTest
     assert_equal Search.count, 0
 
     post searches_url, params: { query: "Bacon" }
-    assert_response :success
+    assert_response :created
 
     assert_equal Search.count, 1
     assert_includes @response.body, "Bacon First"

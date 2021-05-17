@@ -20,12 +20,14 @@ class SearchesController < ApplicationController
   end
 
   def create
+    status = :ok
     unless @search = Search.find_by(query: params[:query])
       search_response = search_service.search(query: params[:query])
       @search = Search.create(query: params[:query], quotes: search_response)
+      status = :created
     end
 
-    render json: @search
+    render json: @search, status: status
   end
 
   private
