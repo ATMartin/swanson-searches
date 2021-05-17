@@ -113,6 +113,14 @@ definitions:
         items:
           type: "string"
           description: "A collection of quotes matching the given `query`. May be empty."
+      created_at:
+        type: "string"
+        format: "date-time"
+        description: "The time this search was created in ISO 8601 format."
+      updated_at:
+        type: "string"
+        format: "date-time"
+        description: "The time this search was last updated in ISO 8601 format."
 externalDocs:
   description: "Read more about us on GitHub!"
   url: "https://github.com/ATMartin/swanson-leaderboard"
