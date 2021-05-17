@@ -3,9 +3,11 @@ class SearchesController < ApplicationController
 
   def index
     @searches = Search.all
+    render json: @searches
   end
 
   def show
+    render json: @search
   end
 
   def create
