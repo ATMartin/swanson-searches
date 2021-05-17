@@ -27,6 +27,28 @@ class SearchesControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, "Different Text Here"
   end
 
+  test "sorts ascending query by default" do
+    Search.create(query: "Apple", quotes: [])
+    Search.create(query: "Burgers", quotes: [])
+    Search.create(query: "Cheeseburgers", quotes: [])
+
+    get searches_url
+    assert_response :success
+
+    assert @response.body.index("Cheese") > @response.body.index("Apple")
+  end
+
+  test "should allow sorting the index by query" do
+    Search.create(query: "Apple", quotes: [])
+    Search.create(query: "Burgers", quotes: [])
+    Search.create(query: "Cheeseburgers", quotes: [])
+
+    get searches_url, params: { sort: "desc" }
+    assert_response :success
+
+    assert @response.body.index("Cheese") < @response.body.index("Apple")
+  end
+
   test "should get search by id" do
     @search = Search.create(query: "Bacon", quotes: ["Bacon First", "Bacon Second"])
 

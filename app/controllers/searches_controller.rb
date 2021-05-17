@@ -2,10 +2,14 @@ class SearchesController < ApplicationController
   before_action :load_search, only: [:show]
 
   def index
-    @searches = Search.all
+    @searches = Search.all.order(query: :asc)
 
     if params[:filter]
       @searches = @searches.where("query ILIKE ?", "%#{params[:filter]}%")
+    end
+
+    if params[:sort] == "desc"
+      @searches = @searches.reorder(query: :desc)
     end
 
     render json: @searches
