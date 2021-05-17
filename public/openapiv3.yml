@@ -1,0 +1,118 @@
+swagger: "2.0"
+info:
+  description: "This is a slim wrapper around the [Swanson Quotes API](https://github.com/jamesseanwright/ron-swanson-quotes), allowing filtering & quick recall of popular searches."
+  version: "0.0.1"
+  title: "Swanson Leaderboard"
+  contact:
+    email: "hi@atmartin.io"
+host: "swanson-leaderboard.herokuapp.com"
+basePath: "/"
+tags:
+- name: "search"
+  description: "Manage searches for Swanson quotes by query string"
+schemes:
+- "https"
+paths:
+  /searches:
+    post:
+      tags:
+      - "search"
+      summary: "Get search results from the source API"
+      description: "POSTing to this endpoint will return search results from the Swanson Quotes API, based on a `query` param in the POSt body. If your search query has never been searched before, we'll create a new Search record for you as well. If your query has been searched before, we'll return the results of that search."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "query"
+        description: "Word or series of words to search the Swanson Quotes API for."
+        required: true
+        schema:
+          $ref: "#/definitions/SearchQuery"
+      responses:
+        "200":
+          description: "We found an existing search and have returned the results."
+        "201":
+          description: "We created a new Search for your query and have returned the results."
+        "400":
+          description: "Invalid input. You may be missing the required `query` param, or there may be an error message forwarded from the Swanson Quotes API. You may be able to resolve this error by changing your request."
+        "500":
+          description: "Server error. The Swanson Quotes API may be down, or there may be an error message forwarded from the Swanson Quotes API. Changing your request is unlikely to resolve this error; please try again later."
+    get:
+      tags:
+      - "search"
+      summary: "Get a list of all saved Swanson Quotes API searches"
+      description: "GETting this endpoint will return all saved search queries and their associated results. You can `filter` this list by its query, or `sort` in `asc` or `desc` orders."
+      produces:
+      - "application/json"
+      parameters:
+      - in: "query"
+        name: "filter"
+        type: "string"
+        description: "Matches the full text of saved `query` values. The filter parameter will not match quotes, only query values."
+        required: false
+      - in: "query"
+        name: "sort"
+        type: "string"
+        description: "Alphabetical sort order by `query` value. May be 'asc' (default) or 'desc'."
+        required: false
+      responses:
+        "200":
+          description: "We have returned a list of all available searches, or an empty array if there are none."
+          schema:
+            $ref: "#/definitions/SearchCollection"
+        "500":
+          description: "Server error. The Swanson Quotes API may be down, or there may be an error message forwarded from the Swanson Quotes API. Changing your request is unlikely to resolve this error; please try again later."
+  /searches/{searchId}:
+    get:
+      tags:
+      - "search"
+      summary: "Show a search by ID"
+      description: "Returns a single Search record by its numeric ID."
+      produces:
+      - "application/json"
+      parameters:
+      - name: "searchId"
+        in: "path"
+        description: "ID of Search record to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "We found the Search you requested and have returned it."
+          schema:
+            $ref: "#/definitions/Search"
+        "404":
+          description: "A Search record could not be found with the given ID."
+        "500":
+          description: "Server error. The Swanson Quotes API may be down, or there may be an error message forwarded from the Swanson Quotes API. Changing your request is unlikely to resolve this error; please try again later."
+definitions:
+  SearchCollection:
+    type: "array"
+    items: 
+      $ref: "#/definitions/Search"
+  SearchQuery:
+    type: "object"
+    properties:
+      query:
+        type: "string"
+        description: "A word or series of words (separated by spaces) to search for in the Swanson Quotes API."
+      Search:
+        type: "object"
+        properties:
+          id:
+            type: "integer"
+            format: "int64"
+          query:
+            type: "string"
+            description: "A word or series of words (separated by spaces) used to search in the Swanson Quotes API."
+          quotes:
+            type: "array"
+            items:
+              type: "string"
+              description: "A collection of quotes matching the given `query`. May be empty."
+externalDocs:
+  description: "Read more about us on GitHub!"
+  url: "https://github.com/ATMartin/swanson-leaderboard"
