@@ -1,14 +1,15 @@
 class SearchesController < ApplicationController
   before_action :load_search, only: [:show]
+  before_action :require_query, only: [:create]
 
   def index
     @searches = Search.all.order(query: :asc)
 
-    if params[:filter]
-      @searches = @searches.where("query ILIKE ?", "%#{params[:filter]}%")
+    if search_params[:filter]
+      @searches = @searches.where("query ILIKE ?", "%#{search_params[:filter]}%")
     end
 
-    if params[:sort] == "desc"
+    if search_params[:sort] == "desc"
       @searches = @searches.reorder(query: :desc)
     end
 
@@ -21,9 +22,11 @@ class SearchesController < ApplicationController
 
   def create
     status = :ok
-    unless @search = Search.find_by(query: params[:query])
-      search_response = search_service.search(query: params[:query])
-      @search = Search.create(query: params[:query], quotes: search_response)
+    query = search_params[:query]
+
+    unless @search = Search.find_by(query: query)
+      search_response = search_service.search(query: query)
+      @search = Search.create(query: query, quotes: search_response)
       status = :created
     end
 
@@ -34,8 +37,18 @@ class SearchesController < ApplicationController
 
   private
 
+  def search_params
+    params.permit(:sort, :filter, :query)
+  end
+
   def load_search
     @search = Search.find(params[:id])
+  end
+
+  def require_query
+    return if search_params[:query]
+
+    render json: { error: "You must provide a 'query' key to run a search." }, status: :bad_request
   end
 
   def search_service

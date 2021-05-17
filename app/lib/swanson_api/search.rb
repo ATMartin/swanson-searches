@@ -1,8 +1,5 @@
 module SwansonApi
   class Search
-    def initialize
-    end
-
     def search(query:)
       response = Faraday.get "#{root_url}/search/#{query}"
 

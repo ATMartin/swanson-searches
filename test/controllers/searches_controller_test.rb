@@ -95,6 +95,13 @@ class SearchesControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, "Bacon Second"
   end
 
+  test "should error for an invalid param" do
+    post searches_url, params: { inquiry: "Bacon" }
+    assert_response :bad_request
+
+    assert_includes @response.body, "You must provide a 'query' key to run a search."
+  end
+
   test "should forward errors from the search service as JSON" do
     search_api = Minitest::Mock.new
     def search_api.search(query:); raise SwansonApi::Error.new(status: 500, message: "Whoops!"); end
