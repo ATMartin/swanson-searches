@@ -29,4 +29,37 @@ class SearchesControllerTest < ActionDispatch::IntegrationTest
       get search_url(999_999)
     end
   end
+
+  test "should return an existing search for a particular query" do
+    @search = Search.create(query: "Bacon", quotes: ["Bacon First", "Bacon Second"])
+
+    # Ensure our API service is never called in this case
+    search_api = Minitest::Mock.new
+    def search_api.search(query:); raise StandardError; end
+
+    SwansonApi::Search.stub :new, search_api do
+      post searches_url, params: { query: "Bacon" }
+      assert_response :success
+
+      assert_includes @response.body, "Bacon First"
+      assert_includes @response.body, "Bacon Second"
+    end
+  end
+
+  test "should create a new search for a nonexistent query" do
+    # Stub the API service to avoid external calls in test
+    search_api = Minitest::Mock.new
+    def search_api.search(query:); Search.create(query: "Bacon", quotes: ["Bacon First", "Bacon Second"]); end
+
+    SwansonApi::Search.stub :new, search_api do
+      assert_equal Search.count, 0
+
+      post searches_url, params: { query: "Bacon" }
+      assert_response :success
+
+      assert_equal Search.count, 1
+      assert_includes @response.body, "Bacon First"
+      assert_includes @response.body, "Bacon Second"
+    end
+  end
 end
