@@ -4,6 +4,10 @@ require "rails/test_help"
 
 # Support Minitest::Mock
 require 'minitest/autorun'
+# Support preventing external connections with WebMock
+require 'webmock/minitest'
+
+WebMock.disable_net_connect!(allow_localhost: true)
 
 class ActiveSupport::TestCase
   # Run tests in parallel with specified workers
@@ -11,6 +15,4 @@ class ActiveSupport::TestCase
 
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
-
-  # Add more helper methods to be used by all tests here...
 end
