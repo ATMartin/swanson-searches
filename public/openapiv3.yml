@@ -99,20 +99,20 @@ definitions:
       query:
         type: "string"
         description: "A word or series of words (separated by spaces) to search for in the Swanson Quotes API."
-      Search:
-        type: "object"
-        properties:
-          id:
-            type: "integer"
-            format: "int64"
-          query:
-            type: "string"
-            description: "A word or series of words (separated by spaces) used to search in the Swanson Quotes API."
-          quotes:
-            type: "array"
-            items:
-              type: "string"
-              description: "A collection of quotes matching the given `query`. May be empty."
+  Search:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      query:
+        type: "string"
+        description: "A word or series of words (separated by spaces) used to search in the Swanson Quotes API."
+      quotes:
+        type: "array"
+        items:
+          type: "string"
+          description: "A collection of quotes matching the given `query`. May be empty."
 externalDocs:
   description: "Read more about us on GitHub!"
   url: "https://github.com/ATMartin/swanson-leaderboard"
