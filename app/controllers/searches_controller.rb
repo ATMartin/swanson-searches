@@ -12,7 +12,8 @@ class SearchesController < ApplicationController
 
   def create
     unless @search = Search.find_by(query: params[:query])
-      @search = search_service.search(query: params[:query])
+      search_response = search_service.search(query: params[:query])
+      @search = Search.create(query: params[:query], quotes: search_response)
     end
 
     render json: @search
