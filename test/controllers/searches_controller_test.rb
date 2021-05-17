@@ -94,4 +94,16 @@ class SearchesControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, "Bacon First"
     assert_includes @response.body, "Bacon Second"
   end
+
+  test "should forward errors from the search service as JSON" do
+    search_api = Minitest::Mock.new
+    def search_api.search(query:); raise SwansonApi::Error.new(status: 500, message: "Whoops!"); end
+
+    SwansonApi::Search.stub :new, search_api do
+      post searches_url, params: { query: "Bacon" }
+      assert_response 500
+
+      assert_includes @response.body, "Whoops!"
+    end
+  end
 end

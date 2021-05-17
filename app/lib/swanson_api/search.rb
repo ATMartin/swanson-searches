@@ -8,7 +8,17 @@ module SwansonApi
 
       if response.status == 200
         JSON.parse(response.body)
+      else
+        raise Error.new(
+          status: response.status,
+          message: response.body
+        )
       end
+    rescue Faraday::Error => e
+      raise Error.new(
+        status: 500,
+        message: "We were unable to connect to the Swanson Quotes API. Please try again later."
+      )
     end
 
     def root_url

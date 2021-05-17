@@ -28,6 +28,8 @@ class SearchesController < ApplicationController
     end
 
     render json: @search, status: status
+  rescue SwansonApi::Error => e
+    render json: { error: e.message }, status: e.status
   end
 
   private
