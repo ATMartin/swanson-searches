@@ -3,12 +3,13 @@
 -- 🥓🍳🥞🌲🌲🛶 --
 
 Search for popular Ron Swanson quotes and see what other users have searched for, too!
-Try this app out on Heroku at https://swanson-leaderboard.herokuapp.com/.
+
+#### Try this app out on Heroku at https://swanson-leaderboard.herokuapp.com/.
 
 
 ## API
 
-Check out our [OpenAPI docs](https://petstore.swagger.io/?url=https://swanson-leaderboard.herokuapp.com/openapiv3.yml) for interactive examples of the available API.
+🕵️ Check out our [OpenAPI docs](https://petstore.swagger.io/?url=https://swanson-leaderboard.herokuapp.com/openapiv3.yml) for interactive examples of the available API.
 
 Here's a short summary of available endpoints:
 
@@ -32,6 +33,7 @@ We recommend [Postman](https://www.postman.com/) for exploring the API.
 ## Setup & Details
 
 This app is built on Ruby 2.7.2 & Rails 6.1.3.2 and stores data in Postgres 13.
+
 It's a thin wrapper around the [Ron Swanson Quotes API](https://github.com/jamesseanwright/ron-swanson-quotes).
 
 To set it up locally, you'll need [PostgreSQL](https://www.postgresql.org/) installed & running.
