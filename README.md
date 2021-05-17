@@ -24,7 +24,7 @@ POST /searches
       Requires a body like `{"query": "your-query-string-here"}`.
 
 GET /searches/:id
-   -- Returns a specific search & associate result by its numeric ID.
+   -- Returns a specific search & associated result by its numeric ID.
 ```
 
 We recommend [Postman](https://www.postman.com/) for exploring the API.
@@ -66,9 +66,9 @@ rails test
 <details>
   <summary>🧶 Tight integration with Postgres</summary>
   <p>
-    This app is built to use the `ARRAY` data type and includes the `ILIKE` SQL operator, both which have limited support
-    outside of Postgres. It might be nice to replace these with an alternative implementation that could make the API 
-    database-agnostic.
+    This app is built to use the <code>ARRAY</code> data type and includes the <code>ILIKE</code> SQL operator, both of
+    which have limited support outside of Postgres. It might be nice to replace these with an alternative implementation
+    that could make the API database-agnostic.
   </p>
 </details>
 
@@ -76,7 +76,7 @@ rails test
   <summary>🔓 No auth*tion</summary>
   <p>
     That's right: this is an entirely open API at the moment. This poses a slew of problems, including the risk of serious
-    abuse. At it's simplest, a protective layer may involve a quick hash provisioned for users by email & required in the 
+    abuse. At its simplest, a protective layer may involve a quick hash provisioned for users by email & required in the
     query params. Going further, a proper auth system likely involves OAuth + third party authentication, abuse & spam reporting,
     and maybe a tiered subscription plan for folks with heavy query needs? The sky's the limit!
   </p>
