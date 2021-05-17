@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:13.3-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - swanson_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+
+volumes:
+  swanson_data:
